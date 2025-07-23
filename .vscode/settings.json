@@ -5,5 +5,10 @@
         "apm32f4xx.h": "c",
         "apm32f4xx_usart.h": "c",
         "apm32f4xx_rcm.h": "c"
-    }
+    },
+    "cmake.configureArgs": [
+        "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/cmake/toolchain-arm-none-eabi.cmake"
+    ],
+    "cmake.generator": "Ninja",
+    "cmake.showSystemKits": false
 }
