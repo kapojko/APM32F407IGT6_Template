@@ -125,3 +125,20 @@ add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
     COMMAND ${CMAKE_OBJDUMP} -D "${PROJECT_NAME}.elf" > "${PROJECT_NAME}.dump"
     COMMENT "Object dump"
 )
+
+# OpenOCD path
+if(DEFINED ENV{OPENOCD_PATH})
+    set(OPENOCD_PATH "$ENV{OPENOCD_PATH}")
+else()
+    set(OPENOCD_PATH "D:/Github/GeehySemi/Openocd/openocd-v0.12.0-rc2-i686-w64-mingw32.tar_wkl")
+endif()
+
+# Flash program
+add_custom_target(prog
+    COMMAND ${OPENOCD_PATH}/bin/openocd.exe
+        -f ${OPENOCD_PATH}/share/openocd/scripts/interface/cmsis-dap.cfg
+        -f ${OPENOCD_PATH}/share/openocd/scripts/target/apm32f4x.cfg
+        -c "program ${PROJECT_NAME}.elf verify reset exit"
+    DEPENDS ${PROJECT_NAME}.elf
+    COMMENT "Flashing firmware via OpenOCD"
+)
