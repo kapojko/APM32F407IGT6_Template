@@ -1,0 +1,127 @@
+cmake_minimum_required(VERSION 3.15)
+project(APM32F407IGT6_Template C ASM)
+
+# Paths
+set(SOURCE_ROOT ${CMAKE_SOURCE_DIR})
+
+# Sources (gather recursively)
+file(GLOB_RECURSE SOURCES
+    ${SOURCE_ROOT}/APM32F4xx_StdPeriphDriver/src/*.c
+    ${SOURCE_ROOT}/Device/Source/*.c
+    ${SOURCE_ROOT}/Device/Source/*.S
+    ${SOURCE_ROOT}/User/*.c    
+)
+
+file(GLOB_RECURSE HEADERS
+    ${SOURCE_ROOT}/APM32F4xx_StdPeriphDriver/inc/*.h
+    ${SOURCE_ROOT}/CMSIS/Include/*.h
+    ${SOURCE_ROOT}/Device/Include/*.h
+    ${SOURCE_ROOT}/User/*.h
+)
+
+# Include directories
+include_directories(
+    APM32F4xx_StdPeriphDriver/inc
+    CMSIS/Include
+    Device/Include
+    User
+)
+
+# Executable
+add_executable(${PROJECT_NAME}.elf ${SOURCES} ${HEADERS})
+
+# Compile definitions (macros)
+target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
+    APM32F407xx
+    DEBUG=DEBUG_USART1
+)
+
+# Target processor
+set(TARGET_PROCESSOR
+    -mcpu=cortex-m4
+    -mthumb
+)
+
+# Optimization
+set(OPTIMIZATION
+    -O0
+    -fmessage-length=0
+    -fsigned-char
+    -ffunction-sections
+    -fdata-sections
+)
+
+# Warnings
+set(WARNINGS
+    -Wall
+    -Wextra
+)
+
+# Debugging
+set(DEBUGGING
+    -g
+)
+
+# GNU Arm Cross Assembler Flags
+set(ASSEMBLER_FLAGS
+    "-x assembler-with-cpp"
+)
+
+# GNU Arm Cross C Compiler Flags
+set(C_COMPILER_FLAGS
+    -std=gnu17
+)
+
+# GNU Arm Cross C Linker
+set(LINKER_FLAGS
+    -Wl,--gc-sections,-Map=${PROJECT_NAME}.map,-u,_printf_float
+    --specs=nano.specs
+    --specs=nosys.specs
+)
+
+# Set assembly flags
+set_source_files_properties(${ASM_FILES} PROPERTIES
+    COMPILE_FLAGS "${ASSEMBLER_FLAGS}"
+)
+
+# Set C flags
+set_source_files_properties(${C_FILES} PROPERTIES
+    COMPILE_FLAGS "${C_COMPILER_FLAGS}"
+)
+
+# Common compiler flags
+target_compile_options(${PROJECT_NAME}.elf PRIVATE
+    ${TARGET_PROCESSOR}
+    ${OPTIMIZATION}
+    ${WARNINGS}
+    ${DEBUGGING}
+)
+
+# Linker script
+set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/Link/apm32f407xg_flash.ld)
+
+# Linker flags
+target_link_options(${PROJECT_NAME}.elf PRIVATE
+    -T${LINKER_SCRIPT}
+    ${TARGET_PROCESSOR}
+    ${LINKER_FLAGS}
+)
+
+# GNU Arm Cross Create Flash Image
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex
+    COMMENT "Generating HEX"
+)
+
+# GNU Arm Cross Print Size
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_SIZE} --format=berkeley ${PROJECT_NAME}.elf
+    COMMENT "Print size"
+)
+
+# Object dump
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary "${PROJECT_NAME}.elf" "${PROJECT_NAME}.bin"
+    COMMAND ${CMAKE_OBJDUMP} -D "${PROJECT_NAME}.elf" > "${PROJECT_NAME}.dump"
+    COMMENT "Object dump"
+)

@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.dpf": "yaml",
+        "debug.h": "c",
+        "apm32f4xx.h": "c",
+        "apm32f4xx_usart.h": "c",
+        "apm32f4xx_rcm.h": "c"
+    }
+}
