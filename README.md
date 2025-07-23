@@ -1,6 +1,6 @@
-# APM32F407IGT6_Template
+# APM32F407xG_Template
 
-CMake-based template for APM32F407IGT6 MCU.
+CMake-based template for APM32F407xGxx MCU.
 
 Created on APM32F4xx_SDK_V1.5.0 (30-04-2025).
 
