@@ -4,14 +4,19 @@ project(APM32F407IGT6_Template C ASM)
 # Paths
 set(SOURCE_ROOT ${CMAKE_SOURCE_DIR})
 
-# Sources (gather recursively)
-file(GLOB_RECURSE SOURCES
+# Sources (ASM)
+file(GLOB_RECURSE ASM_SOURCES
+    ${SOURCE_ROOT}/Device/Source/*.S
+)
+
+# Sources (C)
+file(GLOB_RECURSE C_SOURCES
     ${SOURCE_ROOT}/APM32F4xx_StdPeriphDriver/src/*.c
     ${SOURCE_ROOT}/Device/Source/*.c
-    ${SOURCE_ROOT}/Device/Source/*.S
     ${SOURCE_ROOT}/User/*.c    
 )
 
+# Headers
 file(GLOB_RECURSE HEADERS
     ${SOURCE_ROOT}/APM32F4xx_StdPeriphDriver/inc/*.h
     ${SOURCE_ROOT}/CMSIS/Include/*.h
@@ -28,7 +33,7 @@ include_directories(
 )
 
 # Executable
-add_executable(${PROJECT_NAME}.elf ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME}.elf ${ASM_SOURCES} ${C_SOURCES} ${HEADERS})
 
 # Compile definitions (macros)
 target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
@@ -80,12 +85,12 @@ set(LINKER_FLAGS
 )
 
 # Set assembly flags
-set_source_files_properties(${ASM_FILES} PROPERTIES
+set_source_files_properties(${ASM_SOURCES} PROPERTIES
     COMPILE_FLAGS "${ASSEMBLER_FLAGS}"
 )
 
 # Set C flags
-set_source_files_properties(${C_FILES} PROPERTIES
+set_source_files_properties(${C_SOURCES} PROPERTIES
     COMPILE_FLAGS "${C_COMPILER_FLAGS}"
 )
 
