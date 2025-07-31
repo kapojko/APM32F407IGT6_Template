@@ -1,8 +1,4 @@
-#include "apm32f4xx.h"
-#include "apm32f407xx.h"
-#include "apm32f4xx_gpio.h"
-#include "apm32f4xx_rcm.h"
-#include "apm32f4xx_usart.h"
+#include "apm32f4xx_conf.h"
 #include "Debug.h"
 
 #ifdef DEBUG
