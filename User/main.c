@@ -26,7 +26,7 @@
 /* Includes ***************************************************************/
 #include <stdio.h>
 #include "apm32f4xx.h"
-#include "debug.h"
+#include "Debug.h"
 
 /* Private includes *******************************************************/
 

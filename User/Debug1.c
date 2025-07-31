@@ -3,7 +3,7 @@
 #include "apm32f4xx_gpio.h"
 #include "apm32f4xx_rcm.h"
 #include "apm32f4xx_usart.h"
-#include "debug.h"
+#include "Debug.h"
 
 #ifdef DEBUG
 
