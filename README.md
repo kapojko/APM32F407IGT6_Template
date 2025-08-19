@@ -18,13 +18,15 @@ Created on APM32F4xx_SDK_V1.5.0 (30-04-2025).
 
 ## Hardware
 
-* For OpenOCD programming, any of:
+* For OpenOCD (SWD) programming, any of:
     * DapLink CMSIS-DAP
     * LinkMini with DapLink firmware
     * LinkPlus with DapLink firmware
 * For GeehyProg ISP programming:
     * Any USB-to-serial converter (USART)
     * Direct USB connection
+
+To program with ISP, the chip must be in bootloader mode (pull BOOT0 high while resetting).
 
 *NOTE:* There are other programming methods available, including GEEHY-LINK, APM32 PROG and other tools.
 
